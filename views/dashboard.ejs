@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>DashBoard</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="mario.png"/>
+    <link rel="stylesheet" href="/stylesheets/styledash.css">
+    <script type="text/javascript" src="/javascripts/jasdash.js">
+
+    </script>
+
+  </head>
+  <body>
+<div class="w3-container">
+
+  <div class="w3-purple w3-card">
+    <div class="w3-right w3-container">
+      <a href="/logout" class="w3-text-white">Logout</a>
+    </div>
+<br><br>
+  <p style="    text-transform: capitalize">Welcome <%=user.firstname %> <%=user.lastname %></p>
+<br><br>
+<p id="userId" class="w3-text-purple"><%=user._id%></p>
+<p id="userType" class="w3-text-purple"><%=user.type%></p>
+  </div>
+  <div id="student">
+<table id= "student_table" class="w3-table w3-striped w3-bordered">
+  <tr>
+    <th>Start date</th>
+    <th>End date</th>
+    <th>Leave type</th>
+    <th>Reason</th>
+    <th>Status</th>
+  </tr>
+</table>
+<button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-black">Add a leave</button>
+
+<div id="id01" class="w3-modal">
+  <div class="w3-modal-content w3-card-4">
+    <header class="w3-container w3-purple">
+      <span onclick="document.getElementById('id01').style.display='none'"
+      class="w3-button w3-display-topright">&times;</span>
+      <h2>Add a leave</h2>
+    </header>
+    <div class="w3-container">
+        <form class="w3-contaniner" action="/api/newleave" method="post">
+          <input type="text" name="startdate" placeholder="Start Date in format yyyy-mm-dd" class="w3-input w3-round" required>
+          <input type="text" name="endDate" placeholder="Start Date in format yyyy-mm-dd" class="w3-input w3-round" required>
+          <input type="text" name="leavetype" placeholder="Leave Type" class="w3-input w3-round" required>
+          <input type="text" name="reason" placeholder="reason" class="w3-input w3-round" required>
+          <input type="text" name="requestedby" value="<%=user._id%>" class="w3-input w3-round"  style="display:none">
+          <input type="submit" value="Apply for leave">
+        </form>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<div class="w3-container" id="teacher">
+  <table id= "teacher_table" class="w3-table w3-striped w3-bordered">
+    <tr>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Leave type</th>
+      <th>Requested by</th>
+      <th>Reason</th>
+      <th>Status</th>
+      <th>Update</th>
+    </tr>
+
+  </table>
+
+</div>
+
+</div>
+</body>
+</html>
