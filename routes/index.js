@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var user = mongoose.model('user');
-
+var bcrypt = require('bcrypt');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -15,12 +15,31 @@ router.get('/', function(req, res, next) {
 
 //new user save
 router.post('/signup',function(req,res){
-  var new_user = new user(req.body);
-new_user.save(function(err, chap) {
-  if (err)
-    res.json({error: 'true', message: err });
-  res.redirect('/');
+bcrypt.genSalt(10,function(err,salt){
+  bcrypt.hash(req.body.password,salt,function(err,hash){
+    var usr = {
+      firstname : req.body.firstname,
+      lastname : req.body.lastname,
+      username : req.body.username,
+      password : hash,
+      type : req.body.type
+
+    }
+
+    console.log(usr);
+
+      var new_user = new user(usr);
+    new_user.save(function(err, chap) {
+      if (err)
+        res.json({error: 'true', message: err });
+      res.redirect('/');
+    });
+
+
+  });
 });
+
+
 
 });
 // check if session already exist
@@ -38,14 +57,23 @@ router.post('/login',function (req,res) {
   if(!req.body.username|| !req.body.password){
      res.render('index', {message: "Please enter both id and password"});
   } else {
-    user.findOne({'username' : req.body.username,'password' : req.body.password}, function(err,user){
+    user.findOne({'username' : req.body.username }, function(err,user){
    if(err || (user==null)) {
      res.redirect('/');
    }
    else{
-      req.session.user = user;
 
-      res.redirect('/dashboard');
+        bcrypt.compare(req.body.password,user.password,function(err,result){
+          if(result){
+            req.session.user = user;
+               res.redirect('/dashboard');
+          }
+          else{
+            return res.status().send();
+          }
+        });
+
+
     }
 
     });

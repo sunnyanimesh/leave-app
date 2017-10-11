@@ -22,4 +22,6 @@ type:{
   required : true
 }
 });
+
+
 module.exports = mongoose.model('user',schema);
